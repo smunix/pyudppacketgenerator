@@ -10,8 +10,7 @@ class PacketHeader (Header):
     ("SendTime", Type.UINT32),
     ("ServiceID", Type.UINT16),
     ("DeliveryFlag", Type.UINT8),
-    ("NumberMsgEntries", Type.UINT8),
-    ("OutOfBand", Type.STRING (4))
+    ("NumberMsgEntries", Type.UINT8)
   )
   #----------------------------------------------------------------------
   def __init__(self):
@@ -31,7 +30,6 @@ def MakePacketHeader():
   p.ServiceID = 5
   p.DeliveryFlag = 6
   p.NumberMsgEntries = 7
-  p.OutOfBand = "Providence is the Lawyer"
   return p
 
 #----------------------------------------------------------------------
