@@ -82,7 +82,7 @@ class AccessorHelper:
 class HeaderBase:
   """"""
   #----------------------------------------------------------------------
-  def __init__(self, cls, byteOrder = ByteOrder.NATIVE_STANDARD):
+  def __init__(self, cls, byteOrder):
     """Constructor"""
     self.name = cls.__name__
     self.formatter = struct.Struct (byteOrder + HeaderBase.Format (cls))
@@ -140,9 +140,9 @@ class HeaderBase:
     return tuple ([x[VALUE] for x in self.fields_list])
   #----------------------------------------------------------------------
   @staticmethod
-  def DeSerialize(cls, data):
+  def DeSerialize(cls, data, aByteOrder):
     """"""
-    p = HeaderBase.Make (cls, False)
+    p = HeaderBase.Make (cls, withByteOrder = aByteOrder, withAccessor = False)
     data = p.formatter.unpack (data)
     for f, v in zip (HeaderBase.Fields (cls), data):
       p[f] = v
@@ -159,11 +159,11 @@ class HeaderBase:
     return tuple ([x for x, y in cls.FIELDS])
   #----------------------------------------------------------------------
   @staticmethod
-  def Make(cls, withAccessor = True):
+  def Make(cls, withByteOrder = ByteOrder.NATIVE_STANDARD, withAccessor = True):
     """
     Packet Header generator
     """
     if withAccessor:
-      return AccessorHelper (cls ())
+      return AccessorHelper (cls (aByteOrder = withByteOrder))
     else:
-      return cls ()
+      return cls (aByteOrder = withByteOrder)

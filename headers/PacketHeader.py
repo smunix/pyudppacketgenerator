@@ -13,16 +13,16 @@ class PacketHeader (Header):
     ("NumberMsgEntries", Type.UINT8)
   )
   #----------------------------------------------------------------------
-  def __init__(self):
+  def __init__(self, aByteOrder):
     """Constructor"""
     Header.__init__ (self, 
                      PacketHeader,
-                     byteOrder = Endian.NATIVE_STANDARD)
+                     aByteOrder)
 
 #----------------------------------------------------------------------
-def MakePacketHeader():
+def MakePacketHeader(aByteOrder):
   """"""
-  p = Header.Make (PacketHeader)
+  p = Header.Make (PacketHeader, withByteOrder = aByteOrder)
   p.PacketLength = 1
   p.PacketType = 2
   p.PacketSeqNum = 3
@@ -38,11 +38,11 @@ def FormatTest():
   print "Format = ", Header.Format (PacketHeader)
   print "Fields = ", Header.Fields (PacketHeader)
 #----------------------------------------------------------------------
-def SerializeTest():
+def SerializeTest(aByteOrder):
   """"""
-  p1 = MakePacketHeader ()
+  p1 = MakePacketHeader (aByteOrder)
   packed = p1.Get ().Serialize () [0]
-  p2 = Header.DeSerialize (PacketHeader, packed)
+  p2 = Header.DeSerialize (PacketHeader, packed, aByteOrder)
   sourceLabel = 'PACKET SOURCE'
   destinatLabel = 'PACKET DESTINATION'
   print "%s\n%s\n%s\n" % (sourceLabel, '=' * len (sourceLabel), p1.Get ())
@@ -53,4 +53,4 @@ def SerializeTest():
   
 if __name__ == '__main__':
   # FormatTest ()
-  SerializeTest ()
+  SerializeTest (Endian.NETWORK)
