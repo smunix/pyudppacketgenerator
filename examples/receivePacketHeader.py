@@ -15,7 +15,7 @@ def Main ():
   r = multicast.Receiver (GROUP, PORT)
   while True:   
     data, sender = r.Receive ()
-    p = Header.DeSerialize (PacketHeader, data)
+    p = Header.DeSerialize (PacketHeader, data, Endian.NETWORK)
     print sender, ':\n', p.Get ()
     
 if __name__ == '__main__':

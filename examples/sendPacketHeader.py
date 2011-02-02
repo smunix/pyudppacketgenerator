@@ -1,6 +1,6 @@
 import multicast
 from headers import PacketHeader
-from lib import Header
+from lib import Header, Endian
 import time
 
 #----------------------------------------------------------------------
@@ -13,8 +13,10 @@ def Main ():
   Easy, huh?
   """
   GROUP, PORT = '225.0.0.250', 8383
-  p = Header.Make (PacketHeader)
-  p.PacketLength = 1
+  p = Header.Make (PacketHeader, withByteOrder = Endian.NETWORK
+                   )
+  p.PacketLength = 16
+  p.PacketType = 2
   s = multicast.Sender (GROUP, PORT)
   counter = 0
   while True:
@@ -23,7 +25,7 @@ def Main ():
     data = p.Get ().Serialize () [0]
     print "Sending : [", data, "] : to GROUP <", GROUP, ">, PORT <", PORT, ">."
     s.Send (data)
-    # time.sleep (1)
+    time.sleep (1)
     
 if __name__ == '__main__':
   Main ()
