@@ -12,6 +12,7 @@ class PacketHeader (Header):
     ("DeliveryFlag", Type.UINT8),
     ("NumberMsgEntries", Type.UINT8)
   )
+  SIZE = 16
   #----------------------------------------------------------------------
   def __init__(self, aByteOrder):
     """Constructor"""
