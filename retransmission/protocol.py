@@ -3,7 +3,7 @@ from twisted.internet.defer import Deferred
 from twisted.internet import reactor
 from twisted.protocols.basic import LineReceiver
 import logging, time
-from headers import PacketHeader
+from headers import PacketHeader, TYPE_FIELD, LENG_FIELD
 from lib import Header, Endian
 from threading import Thread
 
@@ -51,10 +51,15 @@ class RetransmissionProtocol (Protocol):
     if self.__disconnected:
       return
     self.LOGGER.debug ('Recv <%s> (%d)' % (data, len(data)))
-    p = Header.DeSerialize (PacketHeader, data, Endian.NETWORK)
-    self.LOGGER.debug ("Packet received\n%s" % p.Get ())
-    if p.PacketType == 36:
+    p = Header.DeSerialize (PacketHeader, data[:16], Endian.NETWORK)
+    if p.PacketType == PacketHeader.TYPE['RETX_REQUEST'][TYPE_FIELD]:
+      self.LOGGER.debug ("RETRANSMISSION REQUEST")
       reactor.callLater (1, self.SendResponse)
+      pass
+    if p.PacketType == PacketHeader.TYPE['HEARTBEAT_RESPONSE'][TYPE_FIELD]:
+      self.LOGGER.debug ("HEARTBEAT RESPONSE")
+      pass
+    self.LOGGER.debug ("%s" % p.Get ())
     pass
   #----------------------------------------------------------------------
   def connectionMade (self):
