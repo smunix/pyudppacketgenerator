@@ -1,6 +1,6 @@
 import multicast
 from headers import PacketHeader
-from lib import Header
+from lib import Header, Endian
 
 #----------------------------------------------------------------------
 def Main ():

@@ -22,12 +22,23 @@ class RequestHandler (SocketServer.BaseRequestHandler):
     SocketServer.BaseRequestHandler.__init__ (self, request, client_address, server)
     pass
   #----------------------------------------------------------------------
+  def ReadPacketHeader (self, chunk):
+    """"""
+    while len (self.data < PacketHeader.SIZE):
+      data += chunk
+  #----------------------------------------------------------------------
   def handle (self):
     """"""
     self.logger.debug ("handle")
+    self.data = ''
     while True:
-      data = self.request.recv (PacketHeader.SIZE)
-      self.logger.debug ('data recv = %s (%d)' % (str(data), len (data)))
+      chunk = self.request.recv (PacketHeader.SIZE)
+      self.logger.debug ('chunk recv = %s (%d)' % (str(chunk), len (chunk)))
+      if len (chunk) == 0:
+        self.logger.debug ("Peer ended the connection")
+        return
+      self.ReadPacketHeader (chunk)
+      data += chunk
       if not len (data) == PacketHeader.SIZE:
         continue
       p = Header.DeSerialize (PacketHeader, data, Endian.NETWORK)

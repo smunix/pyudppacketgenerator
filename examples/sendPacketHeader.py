@@ -27,5 +27,8 @@ def Main ():
     s.Send (data)
     time.sleep (1)
     
+    f = 3
+    print "ssss%s" % f
+    
 if __name__ == '__main__':
   Main ()

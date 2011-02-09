@@ -1,13 +1,12 @@
-
 from twisted.internet import reactor
-from retransmission import RetransmissionFactory
+from retransmission import RetransmissionClientFactory
 #----------------------------------------------------------------------
-def TwistedRetxServer ():
+def TwistedRetxClient ():
   """"""
-  reactor.listenTCP (9090, RetransmissionFactory ())
+  reactor.connectTCP ('localhost', 9090, RetransmissionClientFactory ())
   reactor.run ()
   pass
   
 if __name__ == '__main__':
-  TwistedRetxServer ()
+  TwistedRetxClient ()
   pass
