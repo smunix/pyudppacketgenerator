@@ -3,6 +3,8 @@ from lib import Header, Accessor, Endian, Type
 ########################################################################
 class PacketHeader (Header):
   """"""
+  TYPE_FIELD = 'type'
+  LENG_FIELD = 'len'
   FIELDS = (
     ("PacketLength", Type.UINT16),
     ("PacketType", Type.UINT16),
@@ -13,6 +15,17 @@ class PacketHeader (Header):
     ("NumberMsgEntries", Type.UINT8)
   )
   SIZE = 16
+  TYPE = {
+    'HEARTBEAT': { PacketHeader.TYPE_FIELD : 2, 
+                   PacketHeader.LENG_FIELD : 16
+                   },
+    'RETX_REQUEST' : { PacketHeader.TYPE_FIELD : 20, 
+                       PacketHeader.LENG_FIELD : 44
+                       },
+    'RETX_RESPONSE': { PacketHeader.TYPE_FIELD : 23, 
+                       PacketHeader.LENG_FIELD : 16
+                       }
+  }
   #----------------------------------------------------------------------
   def __init__(self, aByteOrder):
     """Constructor"""
