@@ -1,10 +1,11 @@
 from lib import Header, Accessor, Endian, Type
 
+TYPE_FIELD = 'type'
+LENG_FIELD = 'len'
+  
 ########################################################################
 class PacketHeader (Header):
   """"""
-  TYPE_FIELD = 'type'
-  LENG_FIELD = 'len'
   FIELDS = (
     ("PacketLength", Type.UINT16),
     ("PacketType", Type.UINT16),
@@ -16,14 +17,17 @@ class PacketHeader (Header):
   )
   SIZE = 16
   TYPE = {
-    'HEARTBEAT': { PacketHeader.TYPE_FIELD : 2, 
-                   PacketHeader.LENG_FIELD : 16
+    'HEARTBEAT': { TYPE_FIELD : 2, 
+                   LENG_FIELD : 16
                    },
-    'RETX_REQUEST' : { PacketHeader.TYPE_FIELD : 20, 
-                       PacketHeader.LENG_FIELD : 44
+    'HEARTBEAT_RESPONSE': { TYPE_FIELD : 24, 
+                            LENG_FIELD : 16
+                            },
+    'RETX_REQUEST' : { TYPE_FIELD : 20, 
+                       LENG_FIELD : 44
                        },
-    'RETX_RESPONSE': { PacketHeader.TYPE_FIELD : 23, 
-                       PacketHeader.LENG_FIELD : 16
+    'RETX_RESPONSE': { TYPE_FIELD : 23, 
+                       LENG_FIELD : 16
                        }
   }
   #----------------------------------------------------------------------
